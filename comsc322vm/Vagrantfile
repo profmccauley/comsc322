@@ -1,0 +1,63 @@
+require 'date'
+
+basename = "comsc322"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+  config.vm.hostname = basename
+  config.vm.boot_timeout = 300 # that's the default
+
+  # Disable sharing of the directory where this file is
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # .. share a folder called "shared" inside it instead
+  config.vm.synced_folder "shared", "/home/vagrant/shared", create: true
+
+  config.vm.provider "virtualbox" do |v|
+    v.name = basename + "_" + Time.now.to_i.to_s # Make unique(ish)
+    v.memory = 1024 # MBs
+    v.cpus = 1
+    v.gui = false # Change to true if you want to install a GUI
+
+    desc = "This " + basename + " VM was booted at "
+    desc += DateTime.now.to_s.sub("T", " ") + " in the "
+    desc += File.dirname(__FILE__) + " directory."
+    v.customize ["modifyvm", :id, "--description", desc]
+  end
+
+  # Uncomment plugins here if you want to install them automatically.
+  config.vagrant.plugins = [
+    "vagrant-timezone",
+    #"vagrant-disksize",
+  ]
+
+  # If you have the timezone plugin, this will set the timezone of the
+  # VM to the host's timezone.
+  # Install the plugin with "vagrant plugin install vagrant-timezone".
+  if Vagrant.has_plugin?("vagrant-timezone")
+    config.timezone.value = :host
+  end
+
+  # If you have the disksize plugin, this will let you resize the
+  # virtual disk.
+  # Install the plugin with "vagrant plugin install vagrant-disksize".
+  if Vagrant.has_plugin?("vagrant-disksize")
+    config.disksize.size = "20GB"
+  end
+
+  # Install useful software
+  config.vm.provision :shell, inline: "apt-get update && apt-get install -y gcc vim git make gdb valgrind tmux colordiff python2"
+
+  # Set up class git repo
+  config.vm.provision :shell, inline: "git clone https://github.com/profmccauley/comsc322 /home/vagrant/class"
+
+  # Upgrade packages and class git repo regularly
+  config.trigger.after [:up, :resume] do |trigger|
+    trigger.run_remote = {inline: "echo 'Updating packages...'"\
+                                  " && apt-get update"\
+                                  " && apt-get upgrade -y --with-new-pkgs"\
+                                  " && echo 'Updating class git repo...'"\
+                                  " && git -C /home/vagrant/class fetch origin"\
+                                  " && git -C /home/vagrant/class merge --ff-only"}
+  end
+end
