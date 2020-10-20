@@ -46,7 +46,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Install useful software
-  config.vm.provision :shell, inline: "apt-get update && apt-get install -y gcc vim git make gdb valgrind tmux colordiff python2"
+  config.vm.provision :shell, inline: "apt-get update && apt-get install -y gcc vim git make gdb valgrind tmux colordiff python2 zip unzip"
 
   # Set up class git repo
   config.vm.provision :shell, inline: "git clone https://github.com/profmccauley/comsc322 /home/vagrant/class"
