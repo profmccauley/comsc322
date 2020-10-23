@@ -16,5 +16,7 @@ fi
 cp -iPR ~/class/vmfiles/$LEC $SF/$LEC
 cd $SF/$LEC
 git init
+git config user.name "comsc322student"
+git config user.email "comsc322student@example.com"
 git add .
 git commit -m "Initial commit"
