@@ -5,22 +5,24 @@
 
 int main (int argc, char * argv[])
 {
-  if ( fork() ) // I must be the parent
+  if ( fork() == 0 )
   {
-    printf("PARENT: I'm waiting for my child.\n");
-    int status;
-    wait(&status);
-    printf("PARENT: Child exited with return value %i\n",
-           WEXITSTATUS(status));
-    return 0;
+    // I must be the child
+    int number = atoi(argv[1]);
+
+    printf("CHILD: Waiting five seconds...\n");
+    sleep(5);
+    printf("CHILD: Returning %i\n", number);
+
+    return number;
   }
 
-  // I must be the child
-  int number = atoi(argv[1]);
+  // I must be the parent
+  printf("PARENT: I started a child.\n");
 
-  printf("CHILD: Waiting five seconds...\n");
-  sleep(5);
-  printf("CHILD: Returning %i\n", number);
+  //wait(NULL);
 
-  return number;
+  printf("PARENT: I'm done.\n");
+
+  return 0;
 }
