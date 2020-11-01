@@ -4,6 +4,12 @@ set -e
 TASK=L10
 SF=~/shared
 
+if [ "$(uname)" != "Linux" ]; then
+  echo "Not on Linux!"
+  echo "Maybe you're not in your VM?"
+  exit
+fi
+
 if [ ! -e $SF ]; then
   echo "Shared folder not found."
   exit
