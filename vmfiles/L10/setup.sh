@@ -25,5 +25,8 @@ tar xf HW-Scheduler.tgz
 echo "Patching it so it actually works..."
 sed -i.original '0,/python/s//python2/' scheduler.py
 
+echo "Renaming the README for Windows users..."
+mv README-scheduler README-scheduler.txt
+
 echo
-echo "$TASK should now be ready in $SF/$TASK"
+echo "*** $TASK should now be ready in $SF/$TASK ***"
