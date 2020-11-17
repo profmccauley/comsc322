@@ -20,14 +20,14 @@ int main (int argc, char *argv[])
     printf("%p has the value 0x%02x, which is '%c'\n", ptr, *ptr, *ptr);
   }
 
+  char * ptr1 = malloc(4);
   char * ptr2 = malloc(4);
-  char * ptr3 = malloc(4);
-  strcpy(ptr3, "????");
-  strcpy(ptr2, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!xxxx");
+  strcpy(ptr2, "????");
+  strcpy(ptr1, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!xxxx");
+  printf("ptr1 is at %p\n", ptr1);
   printf("ptr2 is at %p\n", ptr2);
-  printf("ptr3 is at %p\n", ptr3);
-  printf("Line4: The string at ptr2 is %s\n", ptr2);
-  printf("Line5: The string at ptr3 is %s\n", ptr3);
+  printf("Line4: The string at ptr1 is %s\n", ptr1);
+  printf("Line5: The string at ptr2 is %s\n", ptr2);
 
   return 0;
 }
